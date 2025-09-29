@@ -1,86 +1,78 @@
-# KipuBank
+# 🌐 KipuBank
 
-## Descripción
+## 🔹 Descripción
 
-KipuBank es un contrato inteligente simple en Ethereum que permite a los usuarios **depositar y retirar ETH** siguiendo límites de seguridad.  
-El contrato aplica:
-
-- Límite total de ETH que puede almacenar (`bankCap`).  
-- Límite máximo por retiro en una transacción (`withdrawLimit`).  
-- Control de saldo por usuario y contadores de depósitos y retiros.  
-- Manejo seguro de transferencias con errores personalizados.  
+**KipuBank** es un contrato inteligente que permite a los usuarios **depositar y retirar ETH**.
 
 ---
 
-## Funcionalidades
+## 🔹 Caracteristicas de funcionabilidad y seguridad
 
-- `deposit()`: Depositar ETH en tu cuenta personal dentro del banco.  
-- `withdraw(uint128 amount)`: Retirar ETH, respetando límites y saldo disponible.  
-- `getMyBalance()`: Consultar tu saldo personal.  
-- `getTotalBalance()`: Consultar el saldo total del banco.  
-
-Se emiten eventos `Deposited` y `Withdrawn` en cada operación exitosa.
-
----
-
-## Límites
-
-- `bankCap`: Límite total de ETH que puede almacenar el banco.  
-- `withdrawLimit`: Límite máximo de retiro por transacción.  
-
-Ambos se definen **al desplegar el contrato** y son inmutables.
+* Depositar ETH en una **bóveda personal**.
+* Retiros limitados por un **límite máximo por transacción** (`withdrawLimit`).
+* Límite global de depósitos (`bankCap`).
+* Emisión de eventos para depósitos y retiros.
+* Contadores globales de **total de depósitos** y **total de retiros**.
+* Patrón **checks-effects-interactions**
+* Transferencias de ETH seguras con `_safeTransfer`
+* Errores personalizados
+* Variables y funciones documentadas con NatSpec
 
 ---
 
-## Errores personalizados
+## 🔹 Instrucciones de despliegue
 
-- `ExceedsBankCap(uint128 attempted, uint128 cap)` → al intentar depositar más del límite total.  
-- `ExceedsWithdrawLimit(uint128 attempted, uint128 limit)` → al intentar retirar más que el límite.  
-- `InsufficientBalance(uint128 requested, uint128 available)` → si no hay fondos suficientes.  
-- `TransferFailed(address to, uint128 amount)` → si falla la transferencia de ETH.
+**Constructor en Remix:**
+Ejemplo utilizado en el despliegue del contrato en la TestNet Sepolia
 
----
+uint128 bankCap = 1000000000000000000000;
+(10000 ETH)
 
-## Instrucciones de despliegue
+uint128 withdrawLimit = 5000000000000000000;
+(5 ETH)
 
-1. Abrir [Remix IDE](https://remix.ethereum.org/).  
-2. Crear un nuevo archivo `KipuBank.sol` y pegar el código del contrato.  
-3. Seleccionar **Solidity Compiler 0.8.20** y compilar.  
-4. Ir a **Deploy & Run Transactions**:
-   - Seleccionar la cuenta (MetaMask) y la red Sepolia.  
-   - Definir los valores de `_bankCap` y `_withdrawLimit` (en wei, por ejemplo `1000000000000000000` = 1 ETH).  
-   - Desplegar el contrato.  
-
-5. Copiar la dirección del contrato desplegado para interactuar.
+1. Seleccionar **Sepolia** en Remix → Injected Web3 (MetaMask).
+2. Ingresar los valores en el constructor.
+3. Presionar **Deploy**.
 
 ---
 
-## Cómo interactuar
+## 🔹 Cómo interactuar con el contrato
 
-- **Depositar ETH:**  
-  - Llamar a `deposit()` enviando ETH desde tu wallet.  
+### 1️⃣ Depositar ETH
 
-- **Retirar ETH:**  
-  - Llamar a `withdraw(amount)` con la cantidad deseada (en uint128 wei).  
+* Función: `deposit()`
+* Valor: cantidad de ETH en wei
+* Resultado:
 
-- **Consultar saldo propio:**  
-  - `getMyBalance()`  
+  * Balance del usuario incrementa
+  * `totalDeposits` incrementa
+  * Evento `Deposited` emitido ✅
 
-- **Consultar saldo total del banco:**  
-  - `getTotalBalance()`
+### 2️⃣ Retirar ETH
+
+* Función: `withdraw(uint128 amount)`
+* Verifica saldo suficiente y límite por transacción
+* Resultado:
+
+  * Balance del usuario decrementa
+  * `totalWithdrawals` incrementa
+  * Evento `Withdrawn` emitido ✅
+
+### 3️⃣ Consultar balances
+
+getMyBalance();      // Saldo del usuario
+getTotalBalance();   // Saldo total del banco
+totalDeposits;       // Total de depósitos
+totalWithdrawals;    // Total de retiros
+
+### 4️⃣ Errores personalizados
+
+| Error                | Descripción                                           |
+| -------------------- | ----------------------------------------------------- |
+| ExceedsBankCap       | Se intenta depositar más de lo permitido por el banco |
+| ExceedsWithdrawLimit | Se intenta retirar más que el límite por transacción  |
+| InsufficientBalance  | No hay suficiente saldo para retirar                  |
+| TransferFailed       | Falló la transferencia de ETH al usuario              |
 
 ---
-
-## Dirección del contrato desplegado
-
-> A completar tras el despliegue en Sepolia.
-
----
-
-## Notas de seguridad y buenas prácticas
-
-- Todos los límites están definidos como **inmutables**.  
-- Uso de errores personalizados para ahorrar gas y mejorar claridad.  
-- Patrón **checks-effects-interactions** aplicado en retiros.  
-- Transferencias de ETH manejadas con `_safeTransfer()` para evitar fallos silenciosos.  
-- Contadores y saldos optimizados con `uint128` y `uint32` para minimizar gas.

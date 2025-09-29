@@ -170,6 +170,32 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "totalDeposits",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalWithdrawals",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint128",
@@ -287,11 +313,11 @@
 	},
 	"sources": {
 		"contracts/Kipu-Bank.sol": {
-			"keccak256": "0x8b5df5c0e13ce45b704e16ded5aeb75e5959fbee993a315f106f4f490c9652fc",
+			"keccak256": "0x5026f90aa4c9a1a164d939916cb00a00cd5a49d732bf5435e5408ba0ef2e4db4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://828e8017ccd689494187041f4a205b750b699805449e086833c107686d87e01e",
-				"dweb:/ipfs/QmQh6SToiWCDrhxuLK7eEpG8PzetqLEueTrEazzzQmuTR1"
+				"bzz-raw://48d4e1a1682f1c4079ffba3dad8d3a36fb66e4aad86414d5dafad167515b2c8c",
+				"dweb:/ipfs/QmSguJ5hpeqyDZgnH8gHT4zWPzNBVoAxdZnHnyBCCyfeUC"
 			]
 		}
 	},

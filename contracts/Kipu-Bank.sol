@@ -6,11 +6,22 @@ pragma solidity ^0.8.20;
 /// @notice Este contrato permite a los usuarios depositar y retirar ETH con límites de seguridad
 contract KipuBank {
 
+    /// -----------------------------------------------------------------------------------------------
+    ///                                   VARIABLES
+    /// -----------------------------------------------------------------------------------------------
+
     /// @notice Límite total de ETH que se puede almacenar en el banco
     uint128 public immutable bankCap;
 
     /// @notice Límite de ETH que se puede retirar en una transacción
     uint128 public immutable withdrawLimit;
+
+    /// @notice 
+    uint32 public totalDeposits;
+
+    /// @notice 
+    uint32 public totalWithdrawals;
+
 
     /// -----------------------------------------------------------------------------------------------
     ///                                    MAPPINGS
@@ -18,12 +29,6 @@ contract KipuBank {
 
     /// @notice Saldo de cada usuario
     mapping(address => uint128) private balances;
-
-    /// @notice Número total de depósitos realizados por cada usuario
-    mapping(address => uint32) private depositCount;
-
-    /// @notice Número total de retiros realizados por cada usuario
-    mapping(address => uint32) private withdrawCount;
 
     /// -----------------------------------------------------------------------------------------------
     ///                                     EVENTOS
@@ -94,7 +99,7 @@ contract KipuBank {
         uint128 amount = uint128(msg.value);
 
         balances[msg.sender] += amount;
-        _updateCounters(msg.sender, true);
+        _updateCounters(true);
 
         emit Deposited(msg.sender, amount);
     }
@@ -102,13 +107,9 @@ contract KipuBank {
     /// @notice Retirar ETH del banco
     /// @param amount Cantidad de ETH a retirar
     /// @dev Respeta límites de retiro y saldo disponible, aplica patrón checks-effects-interactions
-    function withdraw(uint128 amount)
-        external
-        withinWithdrawLimit(amount)
-        hasSufficientBalance(amount)
-    {
+    function withdraw(uint128 amount) external withinWithdrawLimit(amount) hasSufficientBalance(amount) {
         balances[msg.sender] -= amount;
-        _updateCounters(msg.sender, false);
+        _updateCounters(false);
 
         _safeTransfer(msg.sender, amount);
 
@@ -131,14 +132,13 @@ contract KipuBank {
     ///                                    FUNCIONES PRIVADAS
     /// -----------------------------------------------------------------------------------------------
 
-    /// @notice Actualiza los contadores de depósitos o retiros
-    /// @param user Dirección del usuario
+    /// @notice Actualiza los contadores de depósitos y retiros
     /// @param isDeposit True si es depósito, false si es retiro
-    function _updateCounters(address user, bool isDeposit) private {
+    function _updateCounters(bool isDeposit) private {
         if (isDeposit) {
-            depositCount[user] += 1;
+            totalDeposits += 1;
         } else {
-            withdrawCount[user] += 1;
+            totalWithdrawals += 1;
         }
     }
 

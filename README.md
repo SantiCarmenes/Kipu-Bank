@@ -61,10 +61,10 @@ uint128 withdrawLimit = 5000000000000000000;
 
 ### 3️⃣ Consultar balances
 
-getMyBalance();      // Saldo del usuario
-getTotalBalance();   // Saldo total del banco
-totalDeposits;       // Total de depósitos
-totalWithdrawals;    // Total de retiros
+ getMyBalance();      // Saldo del usuario
+ getTotalBalance();   // Saldo total del banco
+ totalDeposits;       // Total de depósitos
+ totalWithdrawals;    // Total de retiros
 
 ### 4️⃣ Errores personalizados
 

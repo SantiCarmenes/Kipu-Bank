@@ -1,0 +1,299 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "_bankCap",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "_withdrawLimit",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "attempted",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "cap",
+						"type": "uint128"
+					}
+				],
+				"name": "ExceedsBankCap",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "attempted",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "limit",
+						"type": "uint128"
+					}
+				],
+				"name": "ExceedsWithdrawLimit",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "requested",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "available",
+						"type": "uint128"
+					}
+				],
+				"name": "InsufficientBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint128",
+						"name": "amount",
+						"type": "uint128"
+					}
+				],
+				"name": "TransferFailed",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "amount",
+						"type": "uint128"
+					}
+				],
+				"name": "Deposited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "amount",
+						"type": "uint128"
+					}
+				],
+				"name": "Withdrawn",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "bankCap",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "deposit",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMyBalance",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "balance",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "totalBalance",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "amount",
+						"type": "uint128"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawLimit",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Santiago Cármenes",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"params": {
+						"_bankCap": "Límite total de ETH que puede almacenar el banco",
+						"_withdrawLimit": "Límite máximo por retiro en una transacción"
+					}
+				},
+				"deposit()": {
+					"details": "Respeta el límite total del banco"
+				},
+				"getMyBalance()": {
+					"returns": {
+						"balance": "Cantidad de ETH disponible para el usuario"
+					}
+				},
+				"getTotalBalance()": {
+					"returns": {
+						"totalBalance": "ETH total almacenado en el contrato"
+					}
+				},
+				"withdraw(uint128)": {
+					"details": "Respeta límites de retiro y saldo disponible, aplica patrón checks-effects-interactions",
+					"params": {
+						"amount": "Cantidad de ETH a retirar"
+					}
+				}
+			},
+			"title": "KipuBank - Un banco simple con límites de depósito y retiro",
+			"version": 1
+		},
+		"userdoc": {
+			"errors": {
+				"ExceedsBankCap(uint128,uint128)": [
+					{
+						"notice": "-----------------------------------------------------------------------------------------------                                     ERRORES -----------------------------------------------------------------------------------------------"
+					}
+				]
+			},
+			"events": {
+				"Deposited(address,uint128)": {
+					"notice": "Se emitirá al depositar ETH"
+				},
+				"Withdrawn(address,uint128)": {
+					"notice": "Se emitirá al retirar ETH"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"bankCap()": {
+					"notice": "Límite total de ETH que se puede almacenar en el banco"
+				},
+				"deposit()": {
+					"notice": "Depositar ETH en el banco"
+				},
+				"getMyBalance()": {
+					"notice": "Consultar el balance propio"
+				},
+				"getTotalBalance()": {
+					"notice": "Consultar el balance total del banco"
+				},
+				"withdraw(uint128)": {
+					"notice": "Retirar ETH del banco"
+				},
+				"withdrawLimit()": {
+					"notice": "Límite de ETH que se puede retirar en una transacción"
+				}
+			},
+			"notice": "Este contrato permite a los usuarios depositar y retirar ETH con límites de seguridad",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Kipu-Bank.sol": "KipuBank"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Kipu-Bank.sol": {
+			"keccak256": "0x8b5df5c0e13ce45b704e16ded5aeb75e5959fbee993a315f106f4f490c9652fc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://828e8017ccd689494187041f4a205b750b699805449e086833c107686d87e01e",
+				"dweb:/ipfs/QmQh6SToiWCDrhxuLK7eEpG8PzetqLEueTrEazzzQmuTR1"
+			]
+		}
+	},
+	"version": 1
+}

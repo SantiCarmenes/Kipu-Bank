@@ -16,10 +16,10 @@ contract KipuBank {
     /// @notice Límite de ETH que se puede retirar en una transacción
     uint128 public immutable withdrawLimit;
 
-    /// @notice 
+    /// @notice Número total de depósitos históricos
     uint32 public totalDeposits;
 
-    /// @notice 
+    /// @notice Número total de retiros históricos
     uint32 public totalWithdrawals;
 
 
